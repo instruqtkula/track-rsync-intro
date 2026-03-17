@@ -1,0 +1,21 @@
+slug: rsync-intro
+id: 4fno6eqyidwc
+title: Rsync Intro
+description: An introduction to the basic use of the rsync file-copying tool
+icon: ""
+tags:
+- rsync
+owner: kula
+developers:
+- kula@instruqt.com
+idle_timeout: 300
+timelimit: 7200
+lab_config:
+  extend_ttl: 300
+  sidebar_enabled: true
+  feedback_recap_enabled: false
+  feedback_tab_enabled: false
+  loadingMessages: false
+  hideStopButton: false
+checksum: "3197194125428016329"
+enhanced_loading: false

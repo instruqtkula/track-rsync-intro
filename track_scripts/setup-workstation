@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -euxo pipefail
+
+while [ ! -f /opt/instruqt/bootstrap/host-bootstrap-completed ]
+do
+    echo "Waiting for Instruqt to finish booting the virtual machine"
+    sleep 5
+done
+
+
+echo "Installing required software"
+apt update
+apt install -y rsync
+
+echo "Install user - our learner does not run as root"
+useradd -c "Iggy Instruqt" -m -u 1137 -s /bin/bash iggy
+
+env > /home/iggy/environment
+install -d -o iggy -g iggy -m 700 /home/iggy/.ssh
+pushd /home/iggy/.ssh
+echo "${IGGYS_KEY_SSH_PRIVATE_KEY_BASE64}" | base64 -d > id_ed25519
+echo "${IGGYS_KEY_SSH_PUBLIC_KEY}" > id_ed25519.pub
+cp id_ed25519.pub authorized_keys
+chown iggy:iggy id_ed25519* authorized_keys
+chmod 400 id_ed25519* authorized_keys
+popd
+
+echo "Setup done"
+exit 0

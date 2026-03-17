@@ -1,0 +1,12 @@
+version: "3"
+virtualmachines:
+- name: workstation
+  image: debian-cloud/debian-12
+  shell: /bin/bash
+  memory: 4096
+  cpus: 1
+- name: fileserver
+  image: debian-cloud/debian-12
+  shell: /bin/bash
+  memory: 4096
+  cpus: 1
