@@ -2,6 +2,13 @@
 
 set -euxo pipefail
 
+DATA_REPO_ORIGIN="instruqtkula/vosp_1000"
+
+function setup_fail () {
+    echo "##### SETUP FAIL #####" "$@"
+    exit 1
+}
+
 while [ ! -f /opt/instruqt/bootstrap/host-bootstrap-completed ]
 do
     echo "Waiting for Instruqt to finish booting the virtual machine"
@@ -10,20 +17,55 @@ done
 
 
 echo "Installing required software"
-apt update
-apt install -y rsync
+apt update || setup_fail "Running apt update"
+apt install -y rsync git gh || setup_fail "Installing software"
+
+echo "Create 'data' group'"
+groupadd data || setup_fail "Creating data group"
 
 echo "Install user - our learner does not run as root"
-useradd -c "Iggy Instruqt" -m -u 1137 -s /bin/bash iggy
+useradd -c "Iggy Instruqt" -G data -m -u 1137 -s /bin/bash iggy || setup_fail "Adding iggy user"
 
 # Install SSH key from track custom resource
-install -d -o iggy -g iggy -m 700 /home/iggy/.ssh
+echo "Install ssh key from track custom resource"
+install -d -o iggy -g iggy -m 700 /home/iggy/.ssh || setup_fail "Creating iggy ssh dir"
 pushd /home/iggy/.ssh
 echo "${IGGYS_KEY_SSH_PRIVATE_KEY_BASE64}" | base64 -d > id_ed25519
 echo "${IGGYS_KEY_SSH_PUBLIC_KEY}" > id_ed25519.pub
 cp id_ed25519.pub authorized_keys
 chown iggy:iggy id_ed25519* authorized_keys
 chmod 400 id_ed25519* authorized_keys
+popd
+
+# Configure SSH Trust on First Use (ToFU)
+echo "Configuring ToFU"
+cat > /etc/ssh/ssh_config.d/tofu.conf <<EOF
+Host *
+  StrictHostKeyChecking accept-new
+EOF
+
+# Handle GitHub token
+## Has the token expired?
+EXPIRY_SECONDS=$(date -d "$(echo "${GITHUB_RO_TOKEN}" | jq -r '.expiry')" '+%s')
+NOW_SECONDS=$(date '+%s')
+if [ $(( EXPIRY_SECONDS - NOW_SECONDS )) -le 0 ]; then
+    echo "GITHUB_RO_TOKEN expired on $(echo "${GITHUB_RO_TOKEN}" | jq -r '.expiry')"
+    exit 1
+fi
+
+GH_TOKEN="$(echo "${GITHUB_RO_TOKEN}" | jq -r '.token')"
+export GH_TOKEN
+
+# On the fileserver host we just download the data for root
+# because iggy won't directly do any work on this host, just
+# send things here
+
+install -o root -g root -m 700  -d /root/data || setup_fail "Creating /root/data"
+
+# Download the data
+## root version
+pushd /root/data
+gh repo clone "${DATA_REPO_ORIGIN}" || setup_fail "Cloning ${DATA_REPO_ORIGIN} into /root/data"
 popd
 
 
