@@ -16,21 +16,6 @@ do
 done
 
 
-echo "Installing required software"
-apt update || setup_fail "Apt update failed"
-apt install -y rsync git gh || setup_fail "Installing software failed"
-
-
-echo "Create 'data' group'"
-groupadd data || setup_fail "Creating data group failed"
-
-echo "Install user - our learner does not run as root"
-useradd -c "Iggy Instruqt" -G data -m -u 1137 -s /bin/bash iggy ||
-    setup_fail "Creating user iggy failed"
-
-install -d -o iggy -g iggy -m 700 /home/iggy/.ssh ||
-    setup_fail "Creating iggy ssh dir failed"
-
 echo "Install ssh key from track custom resource"
 pushd /home/iggy/.ssh
 echo "${IGGYS_KEY_SSH_PRIVATE_KEY_BASE64}" | base64 -d > id_ed25519
@@ -39,48 +24,6 @@ cp id_ed25519.pub authorized_keys
 chown iggy:iggy id_ed25519* authorized_keys
 chmod 400 id_ed25519* authorized_keys
 popd
-
-# Configure SSH Trust on First Use (ToFU)
-echo "Configuring ToFU"
-cat > /etc/ssh/ssh_config.d/tofu.conf <<EOF
-Host *
-  StrictHostKeyChecking accept-new
-EOF
-
-# Handle GitHub token
-## Has the token expired?
-EXPIRY_SECONDS=$(date -d "$(echo "${GITHUB_RO_TOKEN}" | jq -r '.expiry')" '+%s')
-NOW_SECONDS=$(date '+%s')
-if [ $(( EXPIRY_SECONDS - NOW_SECONDS )) -le 0 ]; then
-    echo "GITHUB_RO_TOKEN expired on $(echo "${GITHUB_RO_TOKEN}" | jq -r '.expiry')"
-    exit 1
-fi
-
-GH_TOKEN="$(echo "${GITHUB_RO_TOKEN}" | jq -r '.token')"
-export GH_TOKEN
-
-# We want to create two copies of the repo, one which will be
-# readable by iggy for use in exercises, and another which
-# will only be readable by root, to use in check scripts as a
-# clean source of the code
-
-install -o root -g data -m 2770 -d /opt/data || setup_fail "Unable to create /opt/data"
-install -o root -g root -m 700  -d /root/data || setup_fail "Unable to create /root/data"
-
-# Download the data
-## root version
-pushd /root/data
-gh repo clone "${DATA_REPO_ORIGIN}" || setup_fail "Checking out ${DATA_REPO_ORIGIN} in /root/data"
-popd
-
-## exercise version
-pushd /opt/data
-OLD_UMASK="$(umask)"	# Preserve old umask
-umask 0002		# Make downloaded data writable by data group as well
-gh repo clone "${DATA_REPO_ORIGIN}" || setup_fail "Checking out ${DATA_REPO_ORIGIN} in /opt/data"
-umask "${OLD_UMASK}"
-popd
-
 
 echo "Setup done"
 exit 0

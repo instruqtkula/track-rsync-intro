@@ -1,14 +1,12 @@
 version: "3"
 virtualmachines:
 - name: workstation
-  image: debian-cloud/debian-12
+  image: instruqt-kula/sgt-rsync-workstation-1775072433
   shell: /bin/bash
   memory: 4096
   cpus: 1
 - name: fileserver
-  image: debian-cloud/debian-12
+  image: instruqt-kula/sgt-rsync-fileserver-1775072434
   shell: /bin/bash
   memory: 4096
   cpus: 1
-secrets:
-  - name: GITHUB_RO_TOKEN
