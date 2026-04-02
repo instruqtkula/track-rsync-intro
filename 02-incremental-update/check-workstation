@@ -19,11 +19,15 @@ chown iggy:iggy "${TESTDIR}"
 pushd "${TESTDIR}"
 sudo -u iggy rsync -av --progress --stats fileserver:/opt/data/vosp_1000/ vosp_1000/
 
-# Now use two rsync options to verify that the directories are identical
-#   --dry-run         - don't actually do anything which would touch a file
+# Now use three rsync options to verify that the directories are identical
+#   --dry-run         - don't actually do anything which would touch a file, but-
 #   --itemize-changes - print out an itemized list of changes being made to each file
+#   --delete          - delete any file in the destination not at the source
 #
-# If we do that and get no output, the two directories are identical
+# If we do that and get no output, the two directories are identical. If you do not
+# use the `--delete` option if you have, say, an empty source directory, or files
+# missing in the source, then `--itemize-changes` won't show anything because by
+# default rsync doesn't delete files.
 
 ITEMIZED=$(mktemp)
 
@@ -31,6 +35,7 @@ ITEMIZED=$(mktemp)
 sudo -u iggy rsync -a \
     --dry-run \
     --itemize-changes \
+    --delete \
     /home/iggy/vosp_1000/ \
     vosp_1000/ > "${ITEMIZED}"
 
