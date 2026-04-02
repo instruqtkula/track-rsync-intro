@@ -39,7 +39,7 @@ Notice that the list of files you see on the screen is short, and the
 only files being transferred are files ending in `.cat`. Also take a look
 at these lines in the statistics printed at the end:
 
-```
+```nocopy
 Number of files: 180 (reg: 163, dir: 17)
 Number of created files: 10 (reg: 10)
 Number of deleted files: 0
