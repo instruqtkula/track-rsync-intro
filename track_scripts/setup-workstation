@@ -2,8 +2,6 @@
 
 set -euxo pipefail
 
-DATA_REPO_ORIGIN="instruqtkula/vosp_1000"
-
 function setup_fail () {
     echo "##### SETUP FAIL #####" "$@"
     exit 1
