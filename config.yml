@@ -10,3 +10,6 @@ virtualmachines:
   shell: /bin/bash
   memory: 4096
   cpus: 1
+virtualbrowsers:
+- name: rsync-docs
+  url: https://download.samba.org/pub/rsync/rsync.1
