@@ -4,14 +4,6 @@ id: ivosanc0oved
 type: challenge
 title: Introduction to rsync
 tabs:
-- id: cpe3qytgqc33
-  title: workstation root
-  type: terminal
-  hostname: workstation
-- id: lf2vguegpjmh
-  title: fileserver root
-  type: terminal
-  hostname: fileserver
 - id: b5eqivlhappy
   title: Workstation
   type: terminal
@@ -35,7 +27,7 @@ from the fileserver to our local directory. In later challenges we'll explore
 various options of `rsync`, before finally uploading the data back up to the
 fileserver.
 
-If at any point you are curious, you can check out the [rsync man page](tab-3)
+If at any point you are curious, you can check out the [rsync man page](tab-1)
 tab to see the full list of `rsync` options.
 
 We're going to run this command. Don't worry about what the options mean for
@@ -46,7 +38,7 @@ rsync -av --progress --stats fileserver:/opt/data/vosp_1000/ vosp_1000/
 ```
 
 You can either click on the "copy" link in the upper right corner of the
-command window above, or you can click on "run". Run it in the [Workstation](tab-2)
+command window above, or you can click on "run". Run it in the [Workstation](tab-0)
 tab.
 
 When you have finished, click on the **Check** button below to verify
