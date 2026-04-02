@@ -1,0 +1,9 @@
+#!/bin/bash
+
+set -euxo pipefail
+
+# The previous challenge cleanup script removed /home/iggy/vosp_1000/
+# so we don't need to do anything here
+
+
+exit 0

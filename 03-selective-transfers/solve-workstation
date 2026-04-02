@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -euxo pipefail
+
+pushd /home/iggy
+# We run *every* command we tell iggy to run
+
+sudo -u iggy rsync -av --stats --include '*.lbl' fileserver:/opt/data/vosp_1000/ vosp_1000/
+sudo -u iggy rm -rf vosp_1000/
+sudo -u iggy rsync -av --stats --exclude '*' fileserver:/opt/data/vosp_1000/ vosp_1000/
+sudo -u iggy rsync -av --stats --exclude '*' --include '*.lbl' fileserver:/opt/data/vosp_1000/ vosp_1000/
+sudo -u iggy rsync -av --stats --include '*.lbl' --exclude '*' fileserver:/opt/data/vosp_1000/ vosp_1000/
+sudo -u iggy rsync -av --stats --include '*.lbl' --include '*/' --exclude '*' fileserver:/opt/data/vosp_1000/ vosp_1000/
+
+popd
