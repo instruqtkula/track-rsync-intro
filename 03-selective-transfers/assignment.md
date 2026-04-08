@@ -1,15 +1,15 @@
 ---
 slug: selective-transfers
-id: dktsvo22da3x
+id: qxwsippxz3rd
 type: challenge
 title: Selective Transfers
 tabs:
-- id: uzx9apbuyk7u
+- id: 2myptoiduzkv
   title: Workstation
   type: terminal
   hostname: workstation
   cmd: sudo -i -u iggy
-- id: lqbhdtf0thgx
+- id: jqdjliagjfii
   title: rsync man page
   type: browser
   hostname: rsync-docs

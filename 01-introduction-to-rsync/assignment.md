@@ -1,15 +1,15 @@
 ---
 slug: introduction-to-rsync
-id: ivosanc0oved
+id: 5wx0pvdzlknq
 type: challenge
 title: Introduction to rsync
 tabs:
-- id: b5eqivlhappy
+- id: ogmgq3jib1gp
   title: Workstation
   type: terminal
   hostname: workstation
   cmd: sudo -i -u iggy
-- id: x6ds6nkhghzf
+- id: evf33fq85cbu
   title: rsync man page
   type: browser
   hostname: rsync-docs

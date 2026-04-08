@@ -1,15 +1,16 @@
 slug: rsync-intro
-id: 4fno6eqyidwc
+id: 4ficytqy3ppp
 title: Rsync Intro
 description: An introduction to the basic use of the rsync file-copying tool
 icon: ""
 tags:
+- value-engineering-built
 - rsync
-owner: kula
+owner: test-drive
 developers:
 - kula@instruqt.com
 idle_timeout: 300
-timelimit: 7200
+timelimit: 900
 lab_config:
   extend_ttl: 300
   sidebar_enabled: true
@@ -17,5 +18,5 @@ lab_config:
   feedback_tab_enabled: false
   loadingMessages: false
   hideStopButton: false
-checksum: "17057291042203681654"
+checksum: "8980747669845992560"
 enhanced_loading: false

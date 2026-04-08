@@ -13,3 +13,5 @@ virtualmachines:
 virtualbrowsers:
 - name: rsync-docs
   url: https://download.samba.org/pub/rsync/rsync.1
+secrets:
+- name: IGGYS_SSH_PRIVATE_KEY_BASE64
